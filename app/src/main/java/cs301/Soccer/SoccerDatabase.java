@@ -10,11 +10,13 @@ import java.util.*;
 /**
  * Soccer player database -- presently, all dummied up
  *
- * @author *** put your name here ***
+ * @author *** Blake Nygren ***
  * @version *** put date of completion here ***
  *
  */
 public class SoccerDatabase implements SoccerDB {
+    private Hashtable<String, SoccerPlayer> hashtable= new Hashtable<>();
+
 
     /**
      * add a player
@@ -24,7 +26,17 @@ public class SoccerDatabase implements SoccerDB {
     @Override
     public boolean addPlayer(String firstName, String lastName,
                              int uniformNumber, String teamName) {
-        return false;
+
+        String key = firstName.concat(" ## " + lastName);
+
+        if(hashtable.containsKey(key)) {
+            return false;
+        }
+        else{
+            SoccerPlayer newPlayer = new SoccerPlayer(firstName, lastName, uniformNumber, teamName);
+            hashtable.put(key, newPlayer);
+        }
+        return true;
     }
 
     /**
@@ -34,6 +46,11 @@ public class SoccerDatabase implements SoccerDB {
      */
     @Override
     public boolean removePlayer(String firstName, String lastName) {
+        String key = firstName.concat(" ## " + lastName);
+        if(hashtable.containsKey(key)){
+            hashtable.remove(key);
+            return true;
+        }
         return false;
     }
 
@@ -44,6 +61,12 @@ public class SoccerDatabase implements SoccerDB {
      */
     @Override
     public SoccerPlayer getPlayer(String firstName, String lastName) {
+        String key = firstName.concat(" ## " + lastName);
+
+        if(hashtable.containsKey(key)){
+            return (SoccerPlayer) hashtable.get(key);
+        }
+
         return null;
     }
 
@@ -54,6 +77,12 @@ public class SoccerDatabase implements SoccerDB {
      */
     @Override
     public boolean bumpGoals(String firstName, String lastName) {
+        String key = firstName.concat(" ## " + lastName);
+
+        if(hashtable.containsKey(key)){
+            hashtable.get(key).bumpGoals();
+            return true;
+        }
         return false;
     }
 
@@ -64,8 +93,15 @@ public class SoccerDatabase implements SoccerDB {
      */
     @Override
     public boolean bumpAssists(String firstName, String lastName) {
+        String key = firstName.concat(" ## " + lastName);
+
+        if(hashtable.containsKey(key)){
+            hashtable.get(key).bumpAssists();
+            return true;
+        }
         return false;
     }
+
 
     /**
      * increment a player's shots
@@ -74,7 +110,14 @@ public class SoccerDatabase implements SoccerDB {
      */
     @Override
     public boolean bumpShots(String firstName, String lastName) {
+        String key = firstName.concat(" ## " + lastName);
+
+        if(hashtable.containsKey(key)){
+            hashtable.get(key).bumpShots();
+            return true;
+        }
         return false;
+
     }
 
     /**
@@ -84,6 +127,12 @@ public class SoccerDatabase implements SoccerDB {
      */
     @Override
     public boolean bumpSaves(String firstName, String lastName) {
+        String key = firstName.concat(" ## " + lastName);
+
+        if(hashtable.containsKey(key)){
+            hashtable.get(key).bumpSaves();
+            return true;
+        }
         return false;
     }
 
@@ -94,7 +143,14 @@ public class SoccerDatabase implements SoccerDB {
      */
     @Override
     public boolean bumpFouls(String firstName, String lastName) {
+        String key = firstName.concat(" ## " + lastName);
+
+        if(hashtable.containsKey(key)){
+            hashtable.get(key).bumpFouls();
+            return true;
+        }
         return false;
+
     }
 
     /**
@@ -104,6 +160,12 @@ public class SoccerDatabase implements SoccerDB {
      */
     @Override
     public boolean bumpYellowCards(String firstName, String lastName) {
+        String key = firstName.concat(" ## " + lastName);
+
+        if(hashtable.containsKey(key)){
+            hashtable.get(key).bumpYellowCards();
+            return true;
+        }
         return false;
     }
 
@@ -114,6 +176,12 @@ public class SoccerDatabase implements SoccerDB {
      */
     @Override
     public boolean bumpRedCards(String firstName, String lastName) {
+        String key = firstName.concat(" ## " + lastName);
+
+        if(hashtable.containsKey(key)){
+            hashtable.get(key).bumpRedCards();
+            return true;
+        }
         return false;
     }
 
@@ -125,7 +193,26 @@ public class SoccerDatabase implements SoccerDB {
     @Override
     // report number of players on a given team (or all players, if null)
     public int numPlayers(String teamName) {
-        return -1;
+        int teamCount = 0;
+        boolean teamSelected = false;
+
+        if(!(teamName.equals("### ALL ###"))) {
+            teamSelected = true;
+        }
+            Set<String> keys = hashtable.keySet();
+
+            for(String key: keys) {
+
+                if (teamSelected) {
+                    if (hashtable.get(key).getTeamName().equals(teamName)) {
+                        teamCount++;
+                    }
+                } else {
+                    teamCount++;
+                }
+            }
+
+        return teamCount;
     }
 
     /**
