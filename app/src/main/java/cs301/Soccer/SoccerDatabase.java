@@ -196,7 +196,7 @@ public class SoccerDatabase implements SoccerDB {
         int teamCount = 0;
         boolean teamSelected = false;
 
-        if(!(teamName.equals("### ALL ###"))) {
+        if(!(teamName == null)){
             teamSelected = true;
         }
             Set<String> keys = hashtable.keySet();
